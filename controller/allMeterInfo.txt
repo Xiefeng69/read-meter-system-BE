@@ -1,0 +1,5 @@
+filename date statue result
+template.png 2021-04-18 success 18.5
+template1.png 2021-04-18 warning 20
+meter.jpg 2021-04-19 error 5
+template2.png 2021-04-19 success 15

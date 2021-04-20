@@ -1,0 +1,7 @@
+var app = require('../app');
+var http = require('http');
+
+// app.callback()返回一个带有req和res的函数，并且在里面执行middleware函数
+http.createServer(app.callback()).listen(3000, ()=>{
+  console.log('成功启动http');
+})
