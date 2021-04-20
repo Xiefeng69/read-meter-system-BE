@@ -3,9 +3,10 @@
 const router = require('koa-router')()
 router.prefix('/public') //设定该路由的路由前缀
 
-const { getAllMeterInfo, getMeterDetails } = require("../controller/public.js")
+const { getAllMeterInfo, getMeterDetails, uploadImage } = require("../controller/public.js")
 
 router.get('/', getAllMeterInfo)
 router.get('/meter-details', getMeterDetails)
+router.post('/upload-image', uploadImage)
 
 module.exports = router

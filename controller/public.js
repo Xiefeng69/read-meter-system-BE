@@ -69,7 +69,18 @@ const getMeterDetails = async function(ctx) {
     }
 }
 
+const uploadImage = async function(ctx) {
+    console.log('call the function uploadImage');
+    const file = ctx.request.files.file
+    console.log(file.path)
+    // // 创建可读流 const reader = fs.createReadStream(file.path);
+    ctx.body = {
+        status: 200
+    }
+}
+
 module.exports = {
     getAllMeterInfo,
-    getMeterDetails
+    getMeterDetails,
+    uploadImage
 }
