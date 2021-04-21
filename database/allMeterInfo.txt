@@ -1,5 +1,8 @@
-id filename date status result
+id filename date statue result
 1 template.png 2021-04-18 success 18.5
 2 template1.png 2021-04-18 warning 20
 3 meter.jpg 2021-04-19 error 5
 4 template2.png 2021-04-19 success 15
+5 QQ浏览器截图20201229145525.png 2021-3-21 pending NaN
+6 QQ浏览器截图20201229145525.png 2021-3-21 pending NaN
+7 QQ浏览器截图20201111140206.png 2021-4-21 pending NaN

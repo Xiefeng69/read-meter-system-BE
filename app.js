@@ -19,7 +19,7 @@ app.use(koabody({
     multipart: true, // 支持文件格式
     formidable: {
         // 上传目录
-        uploadDir: path.join(__dirname, './static'),
+        uploadDir: path.join(__dirname, './image'),
         // 保留文件扩展名
         keepExtensions: true,
     }

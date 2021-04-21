@@ -3,6 +3,8 @@ const path = require('path')
 const lineReader = require('line-reader')
 
 const readFile = function(p) {
+    // join拼接各path
+    // resolve相当于cd操作
     let targetPath = path.join(__dirname, p)
     let data = []
     return new Promise((resolve, reject) => {
@@ -16,6 +18,25 @@ const readFile = function(p) {
             if (last) {
                 resolve(data)
             }
+        })
+    })
+}
+
+const writeFile = function(p, c) {
+    let targetPath = path.join(__dirname, p)
+    return new Promise(async (resolve, reject) => {
+        let pre =await new Promise((res, rej)=>{
+            fs.readFile(targetPath, (err, data)=>{
+                if (err) console.log(err);
+                res(data.toString())
+            })
+        })
+        let content = pre + '\n' + c
+        fs.writeFile(targetPath, content, {
+            encoding: 'utf8'
+        }, err => {
+            if(err) console.log(err);
+            console.log('写入成功');
         })
     })
 }
@@ -34,6 +55,7 @@ const getAllMeterInfo = async function(ctx) {
         return prev
     }, [])
     data.shift()
+    console.log(rawData);
     ctx.body = {
         status: '200',
         data: data
@@ -71,9 +93,24 @@ const getMeterDetails = async function(ctx) {
 
 const uploadImage = async function(ctx) {
     console.log('call the function uploadImage');
+    // 文件的上传不能像普通参数一样ctx.request.body获取，需要使用koa-body
     const file = ctx.request.files.file
+    /*  另一种方法
+        创建可读流 
+        const reader = fs.createReadStream(file.path);
+        const writer = fs.createWriterStream('upload/img.png')
+        reader.pipe(writer) //可读流通过管道写入可写流
+    */
     console.log(file.path)
-    // // 创建可读流 const reader = fs.createReadStream(file.path);
+    let preData = await readFile('../database/allMeterInfo.txt')
+    let id = preData.length,
+        name = file.name,
+        d = new Date(),
+        date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+        status = 'pending',
+        result = 'NaN';
+    console.log(`${id} ${name} ${date} ${status} ${result}`);
+    writeFile('../database/allMeterInfo.txt', `${id} ${name} ${date} ${status} ${result}`)
     ctx.body = {
         status: 200
     }
