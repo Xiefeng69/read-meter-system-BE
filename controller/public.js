@@ -1,6 +1,8 @@
 const fs = require('fs')
+const childProcess = require('child_process')
 const path = require('path')
 const lineReader = require('line-reader')
+const pythonPath = require('../script/pythonPath')
 
 const readFile = function(p) {
     // join拼接各path
@@ -37,6 +39,19 @@ const writeFile = function(p, c) {
         }, err => {
             if(err) console.log(err);
             console.log('写入成功');
+        })
+    })
+}
+
+const execPython = function(p) {
+    let targetPath = path.join(__dirname, p)
+    return new Promise((res, rej) => {
+        childProcess.exec(`python ${targetPath}`, (err) => {
+            if (err) {
+                rej(err)
+            } else {
+                res('done')
+            }
         })
     })
 }
@@ -110,10 +125,25 @@ const uploadImage = async function(ctx) {
         status = 'pending',
         result = 'NaN';
     console.log(`${id} ${name} ${date} ${status} ${result}`);
+    // 1. 写入文件
     writeFile('../database/allMeterInfo.txt', `${id} ${name} ${date} ${status} ${result}`)
-    ctx.body = {
-        status: 200
-    }
+    // 2. child process 执行 python file
+    execPython(pythonPath['step1']).then((res)=>{
+        console.log(res);
+        execPython(pythonPath['step2'])
+    }).then((res)=>{
+        execPython(pythonPath['step3'])
+    }).then((res)=>{
+        ctx.body = {
+            status: 200
+        }
+    }).catch(err=>{
+        console.log(err);
+        ctx.body = {
+            status: 400,
+            msg: 'error'
+        }
+    })
 }
 
 module.exports = {
